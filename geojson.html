@@ -1,0 +1,60 @@
+<html>
+<head>
+	 <meta charset="UTF-8">
+	 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+ 	 <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>	
+ 	 <style type="text/css">
+ 	 		#map { height: 100%; }
+ 	 </style>
+
+</head>
+<body>
+
+	<div id="map"></div>
+
+
+</body>
+ <script type="text/javascript" src="data.json"></script>
+ <script type="text/javascript" src="arrets.geojson"></script>
+ <script type="text/javascript">
+
+		var map = L.map('map').setView([-18.879190, 47.507905], 13);
+			
+		L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			maxZoom: 18,
+			attribution: '>',
+		}).addTo(map);
+
+	  	function popup(feature, layer) {
+	  		layer.bindPopup("<h4 style='color: #777'>" + feature.properties.name + "<\/h4>");
+	  	}
+
+	  	function get_random_color(){
+					    var letters = '0123456789ABCDEF'.split('');
+					    var color = '#';
+					    for (var i = 0; i < 6; i++ ) 
+					    {
+					       color += letters[Math.round(Math.random() * 15)];
+					    }
+					return color;
+					}
+
+	  	function style(feature){
+	  		return{
+	  			color: get_random_color(),
+	  			opacity: 1
+	  		};
+	  	}
+
+		var json = new L.geoJson(tana, {onEachFeature: popup, style: style});
+		var json2 = new L.geoJson(arrets, {onEachFeature: popup});
+
+		var overlay = {"Arrêts": json2}
+		L.control.layers(null, overlay, {collapsed: false, position: 'topright'}).addTo(map);
+
+		json.addTo(map);
+		json2.addTo(map);
+
+
+ 	 </script>
+</html>
